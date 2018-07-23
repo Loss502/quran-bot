@@ -18,7 +18,7 @@ client.on('message', async msg => {
 	const serverQueue = queue.get(msg.guild.id);
 	let command = msg.content.toLowerCase().split(" ")[0];
 	command = command.slice(prefix.length)
-	if (command === `play`) {
+	if (command === `play` || `p`) {
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send('يجب توآجد حضرتك بروم صوتي .');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -78,18 +78,18 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 
 			return handleVideo(video, msg, voiceChannel);
 		}
-	} else if (command === `skip`) {
+	} else if (command === `skip` || `s`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
 		if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لتجآوزه');
 		serverQueue.connection.dispatcher.end('تم تجآوز هذآ المقطع');
 		return undefined;
-	} else if (command === `stop`) {
+	} else if (command === `stop` || `st`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
 		if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لإيقآفه');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('تم إيقآف هذآ المقطع');
 		return undefined;
-	} else if (command === `vol`) {
+	} else if (command === `vol` || `volume`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء شغآل.');
 		if (!args[1]) return msg.channel.send(`:loud_sound: مستوى الصوت **${serverQueue.volume}**`);
@@ -101,7 +101,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: الان يتم تشغيل : **${serverQueue.songs[0].title}**`)
 		return msg.channel.sendEmbed(embedNP);
-	} else if (command === `queue`) {
+	} else if (command === `queue` || `q`) {
 		
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
 		let index = 0;
@@ -112,14 +112,14 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
 **الان يتم تشغيل** ${serverQueue.songs[0].title}`)
 		return msg.channel.sendEmbed(embedqu);
-	} else if (command === `pause`) {
+	} else if (command === `pause` || `ps`) {
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
 			return msg.channel.send('تم إيقاف القران مؤقتا!');
 		}
 		return msg.channel.send('لا يوجد شيء حالي ف العمل.');
-	} else if (command === "resume") {
+	} else if (command === "resume" || "r") {
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
@@ -268,7 +268,7 @@ var adkar = [
 ];
 client.on('message', message => {
   if (message.author.bot) return;
-  if (message.content.startsWith('*اذكار')) {
+  if (message.content.startsWith('*اذكار' || `adkar`)) {
     if(!message.channel.guild) return;
   var client= new Discord.RichEmbed()
   .setTitle("اذكار")
@@ -283,7 +283,7 @@ client.on('message', message => {
 
 
 client.on('message', message => {
-        if (message.content === "*inv") {
+        if (message.content === "*inv" || `*invite` || `*add`) {
             if(!message.channel.guild) return;
         let embed = new Discord.RichEmbed()
         .setAuthor(` ${message.author.username} `, message.author.avatarURL)      
@@ -295,7 +295,7 @@ client.on('message', message => {
    });
 
 client.on('message', message => {
-     if (message.content === "*support") {
+     if (message.content === "*support" || `*sup`) {
      let embed = new Discord.RichEmbed()
   .setAuthor(message.author.username)
   .setColor("#9B59B6")
@@ -307,7 +307,7 @@ client.on('message', message => {
 });
 
 client.on('message', message => {
-    if (message.content === '*help') {
+    if (message.content === '*help' || '*مساعده' || '*مساعدة') {
    var embed = new Discord.RichEmbed()
         .setTitle('تم ارسال جميع الاوامر على الخاص ,, :e_mail: ')
         .setColor('RED')
@@ -335,7 +335,7 @@ j = 1;
 
 client.on("message", message => {
 	var prefix = "*";
- if (message.content === "*help") {
+ if (message.content === '*help' || '*مساعده' || '*مساعدة') {
   const embed = new Discord.RichEmbed() 
       .setColor("#000000")
       .setDescription(`
@@ -345,16 +345,15 @@ https://discord.gg/htNpU3J
 
 ==================================
        
-${prefix}play ⇏ لتشغيل القران برآبط أو بأسم
-${prefix}skip ⇏ لتجآوز الالقران الحآلية
-${prefix}pause ⇏ إيقآف القران مؤقتا
-${prefix}resume ⇏ لموآصلة القران بعد إيقآفهآ مؤقتا
-${prefix}vol ⇏ لتغيير درجة الصوت 100 - 0
-${prefix}stop ⇏ لإخرآج البوت من الروم
+${prefix}play | ${prefix}p ⇏ لتشغيل القران برآبط أو بأسم
+${prefix}skip | ${prefix}s ⇏ لتجآوز الالقران الحآلية
+${prefix}pause | ${prefix}ps ⇏ إيقآف القران مؤقتا
+${prefix}resume  | ${prefix}r ⇏ لموآصلة القران بعد إيقآفهآ مؤقتا
+${prefix}vol | ${prefix}volume ⇏ لتغيير درجة الصوت 100 - 0
+${prefix}stop | ${prefix}st ⇏ لإخرآج البوت من الروم
 ${prefix}np ⇏ لمعرفة القران المشغلة حآليا
-${prefix}queue ⇏ لمعرفة قآئمة التشغيل
-*يعرض لك اذكار ⇏ اذكار
- 
+${prefix}queue | ${prefix}q ⇏ لمعرفة قآئمة التشغيل
+*اذكار | *adkar  ⇏ يعرض لك اذكار
  ==================================
  **المرجو عدم تشغيل اي اغنية بالبوت**
  `)
